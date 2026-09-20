@@ -20,7 +20,7 @@ const days = [
       { time: "10:45", type: "food", label: "餐廳", title: "山麓園・爐端燒", jp: "ほうとう 備選", copy: "11:00 排隊入場；若不想等，可改吃ほうとう。", place: "山麓園", tags: [{ text: "排隊入場", kind: "booking" }, { text: "必點：爐端燒／ほうとう", kind: "must" }] },
       { time: "13:00", type: "attraction", label: "景點", title: "忍野八海", jp: "Oshino Hakkai", copy: "富士山麓湧水池群；拍照時留意人潮與水池周邊動線。", place: "忍野八海", tags: [{ text: "富士山湧水", kind: "guide" }, { text: "必買：草餅／米菓", kind: "buy" }], guide: "建議先走主池群，再安排伴手禮；不要只停在入口，往內走較好拍。", source: "https://www.mtfujiropeway.jp/about/" },
       { time: "14:30", type: "attraction", label: "購物", title: "御殿場 PREMIUM OUTLETS", copy: "晚餐可在 Outlet 解決；19:00 回飯店泡溫泉。", place: "御殿場 Outlet", tags: [{ text: "購物", kind: "buy" }, { text: "必買：限定零食", kind: "buy" }] },
-      { time: "21:00", type: "food", label: "餐廳", title: "消夜拉麵", copy: "視體力決定，隔天 06:30 早餐後還有箱根移動。", place: "御殿場", tags: [{ text: "彈性行程", kind: "neutral" }] },
+      { time: "21:00", type: "food", label: "餐廳", title: "飯店免費消夜拉麵", copy: "飯店內免費提供，來到 Dormy Inn 必吃。", place: "Dormy Inn Express Fujisan Gotemba", tags: [{ text: "免費提供", kind: "booking" }, { text: "必吃", kind: "must" }] },
     ]
   },
   {
@@ -149,19 +149,23 @@ function renderDayButtons() {
 function renderScheduleCard(item, index) {
   const detailId = `detail-${state.selectedDate}-${index}`;
   const tags = (item.tags || []).map(tagHtml).join("");
-  const actions = [
-    `<a class="action-link primary" href="${mapsUrl(item.place)}" target="_blank" rel="noreferrer">導航</a>`,
-    `<a class="action-link subtle" href="${mapsUrl(item.place, true)}" target="_blank" rel="noreferrer">地鐵轉乘</a>`,
-    `<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`
-  ];
+  const isMapCard = item.type === "food" || item.type === "attraction";
+  const actions = isMapCard
+    ? [`<span class="map-hint">點擊卡片開啟 Google Maps</span>`, `<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`]
+    : [
+      `<a class="action-link primary" href="${mapsUrl(item.place)}" target="_blank" rel="noreferrer">導航</a>`,
+      `<a class="action-link subtle" href="${mapsUrl(item.place, true)}" target="_blank" rel="noreferrer">地鐵轉乘</a>`,
+      `<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`
+    ];
   const links = [item.tabelog ? `<a class="source-link" href="${item.tabelog}" target="_blank" rel="noreferrer">查看 Tabelog 推薦</a>` : "", item.source ? `<a class="source-link" href="${item.source}" target="_blank" rel="noreferrer">官方攻略</a>` : ""].filter(Boolean).join(" · ");
-  return `<article class="schedule-card type-${escapeHtml(item.type)}">
+  const mapAttributes = isMapCard ? ` is-map-card" role="link" tabindex="0" data-map-place="${escapeHtml(mapsUrl(item.place))}" aria-label="${escapeHtml(item.title)}，開啟 Google Maps` : "";
+  return `<article class="schedule-card type-${escapeHtml(item.type)}${mapAttributes}">
     <div class="card-topline"><span class="type-pill">${escapeHtml(item.label)}</span><time class="time">${escapeHtml(item.time)}</time></div>
     <h3>${escapeHtml(item.title)}</h3>${item.jp ? `<p class="jp-name">${escapeHtml(item.jp)}</p>` : ""}
     <p class="card-copy">${escapeHtml(item.copy)}</p>
     <div class="card-tags">${tags}</div>
     <div class="card-actions">${actions.join("")}</div>
-    <div class="card-detail" id="${detailId}" hidden><p>${escapeHtml(item.guide || "已將這個地點放進今日動線；點導航可直接開啟地圖。")}</p>${links ? `<div>${links}</div>` : ""}</div>
+    <div class="card-detail" id="${detailId}" hidden><p>${escapeHtml(item.guide || (isMapCard ? "點擊卡片即可直接開啟 Google Maps。" : "已將這個地點放進今日動線；點導航可直接開啟地圖。"))}</p>${links ? `<div>${links}</div>` : ""}</div>
   </article>`;
 }
 
@@ -262,6 +266,11 @@ async function fetchWeather() {
 }
 
 document.addEventListener("click", event => {
+  const mapCard = event.target.closest("[data-map-place]");
+  if (mapCard && !event.target.closest("a, button, input, select, textarea")) {
+    window.open(mapCard.dataset.mapPlace, "_blank", "noopener,noreferrer");
+    return;
+  }
   const viewButton = event.target.closest("[data-view]");
   if (viewButton) { state.view = viewButton.dataset.view; render(); main.focus(); return; }
   const dateButton = event.target.closest("[data-date]");
@@ -277,6 +286,13 @@ document.addEventListener("click", event => {
   }
   if (action.dataset.action === "refresh-weather") fetchWeather();
   if (action.dataset.action === "delete-expense") { state.expenses = state.expenses.filter(item => item.id !== action.dataset.id); save("tokyo-trip-expenses", state.expenses); render(); notify("已刪除這筆記帳"); }
+});
+
+document.addEventListener("keydown", event => {
+  const mapCard = event.target.closest("[data-map-place]");
+  if (!mapCard || event.target.closest("a, button, input, select, textarea") || !["Enter", " "].includes(event.key)) return;
+  event.preventDefault();
+  window.open(mapCard.dataset.mapPlace, "_blank", "noopener,noreferrer");
 });
 
 document.addEventListener("submit", event => {
@@ -298,4 +314,4 @@ document.addEventListener("change", event => {
 
 render();
 fetchWeather();
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=20260920-2", { scope: "./" }).catch(() => {});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=20260920-3", { scope: "./" }).catch(() => {});
