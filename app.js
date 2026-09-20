@@ -25,14 +25,15 @@ const days = [
   },
   {
     date: "2026-10-04", short: "4", weekday: "日", label: "箱根／橫濱／上野", locationKey: "hakone", location: "箱根／上野",
-    intro: "火山、湖景與東京夜色的一天；箱根段請抓準交通銜接。",
+    intro: "火山、湖景、橫濱港未來 21 與東京夜色的一天；箱根段請抓準交通銜接。",
     items: [
-      { time: "09:30", type: "attraction", label: "景點", title: "大涌谷", jp: "Owakudani", copy: "09:30–11:30；午餐安排黑咖哩，注意火山區公告與風勢。", place: "大涌谷", tags: [{ text: "必吃：黑雞蛋", kind: "must" }, { text: "火山區", kind: "guide" }], guide: "先確認當日火山警戒與纜車運行狀況；黑雞蛋適合當作短暫補給。", source: "https://www.hakonenavi.jp/international/en/" },
-      { time: "12:00", type: "attraction", label: "景點", title: "蘆之湖海賊船／箱根神社", jp: "Lake Ashi · Hakone Shrine", copy: "14:00 前完成湖畔鳥居與海賊船；若時間吃緊，先鎖定元箱根港。", place: "蘆之湖／箱根神社", tags: [{ text: "必拍：湖畔鳥居", kind: "must" }, { text: "交通：海賊船", kind: "transit" }], guide: "箱根交通圖提醒：前往箱根神社可在元箱根港下船；湖區移動要預留排隊時間。", source: "https://www.hakonenavi.jp/international/en/wp-content/uploads/sites/2/2025/09/traffic-guide-eng-202510.pdf" },
-      { time: "14:30", type: "attraction", label: "景點", title: "橫濱中華街", copy: "短停吃小點與散步，16:30 前往東京鐵塔。", place: "橫濱中華街", tags: [{ text: "必吃：小籠包／芝麻球", kind: "must" }, { text: "伴手禮", kind: "buy" }] },
-      { time: "16:30", type: "attraction", label: "景點", title: "東京鐵塔", jp: "Tokyo Tower", copy: "17:00 左右抵達；視交通狀況以外觀拍照為主。", place: "東京鐵塔", tags: [{ text: "拍照", kind: "must" }] },
-      { time: "17:30", type: "stay", label: "住宿", title: "入住 PAUL HOUSE 上野館", copy: "辦理入住後，18:00 前往晚餐。", place: "PAUL HOUSE 上野館", tags: [{ text: "住宿", kind: "guide" }] },
-      { time: "18:00", type: "food", label: "餐廳", title: "上野和牛焼肉ぱんが本店", jp: "和牛燒肉", copy: "需要預約；請把預約確認畫面或代號存到工具頁。", place: "上野", tags: [{ text: "需要預約", kind: "booking" }, { text: "必點：和牛拼盤", kind: "must" }] },
+      { time: "06:30", type: "food", label: "早餐", title: "Dormy Inn Express Fujisan Gotemba 早餐／11:00 前退房", jp: "Dormy Inn Express Fujisan Gotemba", copy: "飯店早餐後整理行李，最晚 11:00 前完成退房。", place: "Dormy Inn Express Fujisan Gotemba", tags: [{ text: "早起", kind: "guide" }, { text: "11:00 前退房", kind: "booking" }] },
+      { time: "09:30", type: "food", label: "餐廳", title: "大涌谷／午餐黑咖哩", jp: "Owakudani", copy: "09:30–11:30；大涌谷散步並吃黑咖哩，注意火山區公告與風勢。", place: "大涌谷", tags: [{ text: "必吃：黑咖哩", kind: "must" }, { text: "火山區", kind: "guide" }], guide: "先確認當日火山警戒與纜車運行狀況；把黑咖哩排在大涌谷停留段內。", source: "https://www.hakonenavi.jp/international/en/" },
+      { time: "12:00", type: "attraction", label: "景點", title: "蘆之湖海盜遊覽船／箱根神社／湖畔鳥居", jp: "Lake Ashi · Hakone Shrine", copy: "12:00–14:30；搭海盜遊覽船、參拜箱根神社，再拍湖畔鳥居。", place: "蘆之湖／箱根神社", tags: [{ text: "必拍：湖畔鳥居", kind: "must" }, { text: "交通：海盜遊覽船", kind: "transit" }], guide: "前往箱根神社可鎖定元箱根港；湖區移動要預留排隊與上下船時間。", source: "https://www.hakonenavi.jp/international/en/wp-content/uploads/sites/2/2025/09/traffic-guide-eng-202510.pdf" },
+      { time: "14:30", type: "attraction", label: "景點", title: "横滨港未来 21／红砖仓库／東京鐵塔", jp: "Yokohama Minato Mirai 21 · Red Brick Warehouse · Tokyo Tower", copy: "14:30–17:00；横滨港未来 21、红砖仓库，或改去東京鐵塔，當天視交通與體力決定。", place: "横滨港未来 21", tags: [{ text: "三選一", kind: "guide" }, { text: "當天決定", kind: "neutral" }] },
+      { time: "17:30", type: "stay", label: "住宿", title: "入住 PAUL HOUSE 上野館", copy: "辦理入住；地址：1 Chome-19-8 Higashiueno, Taito City, Tokyo 110-0015 日本。", place: "PAUL HOUSE 上野館, 1 Chome-19-8 Higashiueno, Taito City, Tokyo 110-0015, Japan", tags: [{ text: "住宿", kind: "guide" }, { text: "地址已整理", kind: "buy" }] },
+      { time: "18:30", type: "food", label: "餐廳", title: "一頭牛燒肉 房家 上野六丁目店", jp: "和牛燒肉", copy: "已預約 18:30，請務必準時抵達；晚餐後再回上野採買。", place: "一頭牛燒肉 房家 上野六丁目店", tags: [{ text: "已預約 18:30", kind: "booking" }, { text: "必點：和牛", kind: "must" }] },
+      { time: "20:00", type: "attraction", label: "採買", title: "逛超市／秋葉原 BIC CAMERA", copy: "晚餐後視體力安排超市或秋葉原 BIC CAMERA。", place: "上野／秋葉原 BIC CAMERA", tags: [{ text: "必買：藥妝／電器", kind: "buy" }, { text: "彈性行程", kind: "neutral" }] },
     ]
   },
   {
@@ -41,24 +42,24 @@ const days = [
     items: [
       { time: "08:00", type: "food", label: "餐廳", title: "早餐", copy: "建議前一晚先買好，避免早晨排隊影響淺草寺時間。", place: "上野", tags: [{ text: "前晚採買", kind: "guide" }] },
       { time: "09:00", type: "attraction", label: "景點", title: "淺草寺／雷門", jp: "Senso-ji · Kaminarimon", copy: "早上先拍雷門與仲見世，避開午後人潮。", place: "淺草寺", tags: [{ text: "必買：人形燒／雷おこし", kind: "buy" }, { text: "攻略", kind: "guide" }], guide: "仲見世適合把伴手禮一次買齊；若要參拜，先從雷門一路走進本堂。", source: "https://www.senso-ji.jp/" },
-      { time: "12:00", type: "food", label: "餐廳", title: "午餐四選一", copy: "銀座篝、 とんかつ檍、米料亭八代目儀兵衛、挽肉屋神徳。", place: "銀座", tags: [{ text: "必點：看店家選擇", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1301/rstLst/" },
-      { time: "14:00", type: "attraction", label: "購物", title: "銀座散步／UNIQLO", copy: "把購物集中在銀座，預留晚餐轉移時間。", place: "銀座", tags: [{ text: "購物", kind: "buy" }] },
-      { time: "17:00", type: "food", label: "餐廳", title: "晚餐四選一", copy: "上野和牛焼肉ぱんが、銀座篝、 とんかつ檍、上野鴨 to 葱。", place: "銀座／上野", tags: [{ text: "需要預約：ぱんが", kind: "booking" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1311/rstLst.html" },
-      { time: "18:00", type: "attraction", label: "購物", title: "阿美橫町", jp: "Ameyoko", copy: "藥妝、零食、超市採買；20:00 回旅館休息。", place: "阿美橫町", tags: [{ text: "必買：零食／藥妝", kind: "buy" }, { text: "Tabelog 上野", kind: "guide" }], source: "https://tabelog.com/en/tokyo/A1311/rstLst.html" },
+      { time: "12:00", type: "food", label: "餐廳", title: "午餐四選一", copy: "淺草：大黑家／天彩／尾張屋雷門店；銀座：篝本店、とんかつ檍銀座 8 丁目店、挽肉屋神徳。", place: "淺草／銀座", tags: [{ text: "必點：天婦羅／蕎麥麵／拉麵／豬排／漢堡排", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1301/rstLst/" },
+      { time: "14:00", type: "attraction", label: "購物", title: "銀座逛街／UNIQLO 旗艦店", copy: "把購物集中在銀座，預留晚餐轉移時間。", place: "銀座 UNIQLO", tags: [{ text: "必買：服飾", kind: "buy" }] },
+      { time: "17:00", type: "food", label: "餐廳", title: "晚餐四選一", copy: "篝本店（拉麵）、とんかつ檍銀座 8 丁目店（豬排飯）、焼鳥 鳥よし 銀座店（烤肉）、天ぷら 阿部 銀座本店（天婦羅定食）。", place: "銀座", tags: [{ text: "必點：拉麵／豬排／烤鳥／天婦羅", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1301/rstLst/" },
+      { time: "19:00", type: "attraction", label: "採買", title: "阿美橫町藥妝採購／超市／秋葉原 BIC CAMERA", jp: "Ameyoko", copy: "19:00 回阿美橫町採買藥妝，再視體力逛超市或秋葉原 BIC CAMERA。", place: "阿美橫町／秋葉原 BIC CAMERA", tags: [{ text: "必買：藥妝／零食", kind: "buy" }, { text: "Tabelog 上野", kind: "guide" }], source: "https://tabelog.com/en/tokyo/A1311/rstLst.html" },
     ]
   },
   {
-    date: "2026-10-06", short: "6", weekday: "二", label: "築地／原宿／澀谷", locationKey: "tokyo", location: "東京灣／澀谷",
-    intro: "市場早餐、豐洲市場、表參道午後與澀谷夕景；SHIBUYA SKY 建議先確認預約。",
+    date: "2026-10-06", short: "6", weekday: "二", label: "築地／豐洲／東京車站／澀谷", locationKey: "tokyo", location: "築地／東京",
+    intro: "市場早起，接著去豐洲、東京車站與下午備選景點；晚餐當天決定。",
     items: [
-      { time: "08:00", type: "food", label: "餐廳", title: "早餐二選一", copy: "星巴克上野恩賜公園店，或 Soba & Udon Motochō。", place: "上野", tags: [{ text: "早餐", kind: "guide" }] },
-      { time: "09:00", type: "food", label: "備選早餐", title: "築地市場攤販直接吃早餐", copy: "如果不想先在上野吃早餐，也可以直接到築地市場邊走邊吃。", place: "築地市場", tags: [{ text: "必吃：玉子燒／海鮮", kind: "must" }, { text: "早餐備選", kind: "guide" }], guide: "選這個方案時可直接跳過上野早餐，保留胃口給市場攤販。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
-      { time: "10:30", type: "attraction", label: "景點", title: "豐洲市場", jp: "場外市場", copy: "第二個景點直接安排豐洲市場；市場採買留意營業時間。", place: "豐洲市場", tags: [{ text: "市場散步", kind: "guide" }, { text: "必買：乾貨", kind: "buy" }], guide: "把豐洲市場當成上午主景點，逛場外市場後再接 12:00 午餐。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
-      { time: "12:00", type: "food", label: "餐廳", title: "午餐二選一", copy: "とんかつ八千代（火・木・土限定）或 つきぢ神楽寿司。", place: "築地／豐洲", tags: [{ text: "限定菜單", kind: "booking" }, { text: "必點：叉燒荷包蛋定食／壽司", kind: "must" }] },
-      { time: "14:00", type: "attraction", label: "景點", title: "表參道／原宿", jp: "HARAKADO 或 Omotesando Hills", copy: "兩個室內點擇一，留時間前往澀谷。", place: "表參道／原宿", tags: [{ text: "有冷氣", kind: "guide" }, { text: "伴手禮", kind: "buy" }] },
-      { time: "16:00", type: "attraction", label: "景點", title: "SHIBUYA SKY", copy: "16:00 抵達，預留安檢與入場；夕陽時段通常最熱門。", place: "SHIBUYA SKY", tags: [{ text: "重要預約", kind: "booking" }, { text: "夕景", kind: "must" }], guide: "建議提前確認電子票與入場時段；風雨天留意戶外展望台是否有動線調整。", source: "https://www.shibuya-scramble-square.com/sky/" },
-      { time: "18:00", type: "food", label: "餐廳", title: "晚餐四選一", copy: "AFURI、廻転鮨 銀座おのでら、Kushiyaki Meat Man、回し寿司活。", place: "表參道／澀谷", tags: [{ text: "必點：柚子鹽拉麵／壽司", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1303/rstLst.html" },
-      { time: "20:00", type: "food", label: "採買", title: "買隔天早餐", copy: "最後一晚不排太滿，回旅館整理行李。", place: "上野", tags: [{ text: "明日退房", kind: "guide" }] },
+      { time: "07:00", type: "transit", label: "提醒", title: "早點起床", copy: "08:00 出發，直接前往築地市場攤販。", place: "上野 → 築地市場", tags: [{ text: "早起", kind: "guide" }, { text: "搭地鐵", kind: "transit" }] },
+      { time: "08:00", type: "food", label: "早餐", title: "築地市場攤販逛街小吃", copy: "直接到築地市場邊走邊吃早餐，保留胃口給市場攤販。", place: "築地市場", tags: [{ text: "必吃：玉子燒／海鮮", kind: "must" }, { text: "市場早餐", kind: "guide" }], guide: "早上先逛攤販，不另外安排上野早餐；可依現場排隊狀況彈性選擇。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
+      { time: "10:30", type: "attraction", label: "景點", title: "豐洲千客萬來", jp: "場外市場", copy: "搭日本計程車前往豐洲千客萬來·場外市場，留意市場營業時間。", place: "豐洲千客萬來", tags: [{ text: "交通：日本計程車", kind: "transit" }, { text: "市場散步", kind: "guide" }] , guide: "把豐洲千客萬來當成上午第二個市場景點，逛完直接銜接 12:00 午餐。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
+      { time: "12:00", type: "food", label: "餐廳", title: "午餐三選一", copy: "1. とんかつ八千代（叉燒荷包蛋定食，火・木・土限定）；2. つきぢ神楽寿司（壽司）；3. 東京車站・銀座篝 大手町店。", place: "豐洲／東京車站／銀座", tags: [{ text: "限定菜單", kind: "booking" }, { text: "必點：叉燒荷包蛋／壽司／拉麵", kind: "must" }] },
+      { time: "14:00", type: "attraction", label: "景點", title: "東京車站／皇居", copy: "皇居禮品部列為必買：真皮皮夾。", place: "東京車站／皇居", tags: [{ text: "必買：真皮皮夾", kind: "buy" }, { text: "攻略", kind: "guide" }] },
+      { time: "16:00", type: "attraction", label: "景點", title: "表參道／六本木／東京鐵塔公園", copy: "三選一，當天依體力與交通決定；若選六本木，可考慮銀座篝六本木新城店。", place: "表參道／六本木／東京鐵塔", tags: [{ text: "當天決定", kind: "neutral" }, { text: "備選餐廳：篝六本木新城店", kind: "guide" }] },
+      { time: "18:00", type: "food", label: "餐廳", title: "晚餐三選一", copy: "AFURI（柚子鹽拉麵）、回し寿司活 西武渋谷店（壽司），或回淺草吃。", place: "六本木／澀谷／淺草", tags: [{ text: "必點：柚子鹽拉麵／壽司", kind: "must" }, { text: "當天決定", kind: "neutral" }] },
+      { time: "20:00", type: "attraction", label: "採買", title: "補藥裝／逛超市／秋葉原 BIC CAMERA", copy: "補齊藥妝與伴手禮，視體力安排超市或秋葉原 BIC CAMERA。", place: "上野／秋葉原 BIC CAMERA", tags: [{ text: "必買：藥妝／電器", kind: "buy" }] },
     ]
   },
   {
@@ -77,7 +78,7 @@ const guideNotes = [
   { region: "河口湖／忍野", title: "富士山要看天氣，不要只看時刻表", story: "天上山與日本昔話《咔嚓咔嚓山》有關；富士山麓的湧水與湖面倒影，讓這一天的景色很吃雲量與風勢。", tactic: "晴天先纜車，湖面無風再拍逆富士；如果視線被雲遮住，就把重心放到忍野八海與御殿場 Outlet。", food: "Tabelog 口袋名單：山麓園、ほうとう不動；必點：爐端燒／ほうとう。", souvenir: "必買：草餅、富士山造型點心、御殿場限定零食。", tags: [{ text: "看天氣", kind: "guide" }, { text: "必吃", kind: "must" }, { text: "必買", kind: "buy" }], links: [{ text: "纜車官方", href: "https://www.mtfujiropeway.jp/en/" }, { text: "Tabelog 河口湖", href: "https://tabelog.com/en/yamanashi/A1903/rstLst/" }] },
   { region: "箱根", title: "火山、湖與黑雞蛋", story: "大涌谷是箱根火山活動留下的地景；蘆之湖、箱根神社與湖畔鳥居則是同一天裡最值得慢下來的段落。", tactic: "先查箱根纜車與海賊船運行狀況；箱根神社可從元箱根港銜接，行李與排隊時間要算進去。", food: "必吃：黑雞蛋、黑咖哩；Tabelog 可用箱根區域排名比較晚餐。", souvenir: "必買：寄木細工、黑玉子相關點心。", tags: [{ text: "交通確認", kind: "transit" }, { text: "必吃", kind: "must" }, { text: "必買", kind: "buy" }], links: [{ text: "箱根交通圖", href: "https://www.hakonenavi.jp/international/en/wp-content/uploads/sites/2/2025/09/traffic-guide-eng-202510.pdf" }, { text: "箱根官方", href: "https://www.hakonenavi.jp/international/en/" }] },
   { region: "淺草／上野", title: "伴手禮與地鐵動線一次完成", story: "雷門是淺草最容易辨認的入口，仲見世一路通往淺草寺本堂；上野則把市場街、藥妝、超市與餐廳集中在步行可串聯的範圍。", tactic: "上午先淺草、午後銀座，晚餐後再回阿美橫町採買；每個購物點只留一個清單目標，避免行李太早失控。", food: "Tabelog 推薦查詢：上野日式料理排名；必點可依當天排隊長度選鴨 to 葱或豬排。", souvenir: "必買：人形燒、雷おこし、零食、藥妝。", tags: [{ text: "必買", kind: "buy" }, { text: "Tabelog", kind: "guide" }, { text: "地鐵", kind: "transit" }], links: [{ text: "淺草寺官方", href: "https://www.senso-ji.jp/" }, { text: "Tabelog 上野", href: "https://tabelog.com/en/tokyo/A1311/rstLst.html" }] },
-  { region: "築地／澀谷", title: "市場早起，SHIBUYA SKY 先訂", story: "築地適合邊走邊吃，豐洲適合把市場與正餐集中處理；傍晚再到 SHIBUYA SKY 收尾，整天的節奏會很完整。", tactic: "市場不要兩邊都久留；SHIBUYA SKY 的入場時段與天候是今天的關鍵，晚餐保留一個備選。", food: "必吃：玉子燒、海鮮、壽司；Tabelog 推薦查詢：澀谷與銀座區域排名。", souvenir: "必買：乾貨、海苔、調味料與市場限定零食。", tags: [{ text: "重要預約", kind: "booking" }, { text: "必吃", kind: "must" }, { text: "必買", kind: "buy" }], links: [{ text: "SHIBUYA SKY", href: "https://www.shibuya-scramble-square.com/sky/" }, { text: "Tabelog 澀谷", href: "https://tabelog.com/en/tokyo/A1303/rstLst.html" }] }
+  { region: "築地／豐洲／東京車站", title: "市場早起，把下午留給皇居與備選景點", story: "築地適合邊走邊吃，豐洲千客萬來則把場外市場與正餐集中在上午；午後再把時間留給東京車站、皇居與表參道或六本木。", tactic: "08:00 直接到築地，10:30 搭日本計程車前往豐洲；兩個市場都不要久留，才能準時接上 12:00 午餐與 14:00 皇居。", food: "Tabelog 口袋名單：築地攤販、つきぢ神楽寿司；午餐可比較とんかつ八千代與銀座篝大手町店。", souvenir: "必買：皇居禮品部真皮皮夾；市場可補乾貨、海苔、調味料與限定零食。", tags: [{ text: "早起攻略", kind: "guide" }, { text: "必吃", kind: "must" }, { text: "必買", kind: "buy" }], links: [{ text: "Tabelog 築地", href: "https://tabelog.com/en/tokyo/A1313/rstLst/" }, { text: "Tabelog 東京灣", href: "https://tabelog.com/en/tokyo/A1313/rstLst/" }] }
 ];
 
 const locations = {
@@ -100,7 +101,7 @@ const state = {
   selectedDate: days[0].date,
   weather: load("tokyo-trip-weather", {}),
   expenses: load("tokyo-trip-expenses", []),
-  reservations: load("tokyo-trip-reservations", { hotel: "", yakiniku: "", sky: "" })
+  reservations: load("tokyo-trip-reservations", { hotel: "", yakiniku: "" })
 };
 
 const main = document.querySelector("#app-main");
@@ -189,7 +190,7 @@ function renderTools() {
       <section class="tool-card"><h3>住宿資訊 <span>2 間</span></h3><p>住宿名稱先整理好，確認號可自行補上。</p>
         <div class="stay-row"><div class="stay-date">10/02<br>— 10/04</div><div><div class="stay-name">Dormy Inn Express Fujisan Gotemba</div><div class="stay-note">御殿場 · 溫泉 · 行程前段</div></div></div>
         <div class="stay-row"><div class="stay-date">10/04<br>— 10/07</div><div><div class="stay-name">PAUL HOUSE 上野館</div><div class="stay-note">上野 · 東京市區 · 行程後段</div></div></div>
-        <div class="reservation-grid"><div class="reservation-field"><label class="reservation-label" for="hotel-code">住宿確認代號</label><input class="field" id="hotel-code" data-reservation="hotel" value="${escapeHtml(state.reservations.hotel)}" placeholder="尚未填寫" /></div><div class="reservation-field"><label class="reservation-label" for="yakiniku-code">ぱんが預約代號</label><input class="field" id="yakiniku-code" data-reservation="yakiniku" value="${escapeHtml(state.reservations.yakiniku)}" placeholder="需要預約，請補上" /></div><div class="reservation-field"><label class="reservation-label" for="sky-code">SHIBUYA SKY 預約代號</label><input class="field" id="sky-code" data-reservation="sky" value="${escapeHtml(state.reservations.sky)}" placeholder="尚未填寫" /></div></div>
+        <div class="reservation-grid"><div class="reservation-field"><label class="reservation-label" for="hotel-code">住宿確認代號</label><input class="field" id="hotel-code" data-reservation="hotel" value="${escapeHtml(state.reservations.hotel)}" placeholder="尚未填寫" /></div><div class="reservation-field"><label class="reservation-label" for="yakiniku-code">房家預約代號</label><input class="field" id="yakiniku-code" data-reservation="yakiniku" value="${escapeHtml(state.reservations.yakiniku)}" placeholder="已預約 18:30，可補代號" /></div></div>
       </section>
       <section class="tool-card"><h3>緊急聯絡 <span>日本</span></h3><p>需要時直接點號碼撥打；資料依日本政府觀光局與外交部公開資訊整理。</p>
         <div class="emergency-list"><div class="emergency-item"><span>警察</span><strong><a href="tel:110">110</a></strong></div><div class="emergency-item"><span>消防／救護車</span><strong><a href="tel:119">119</a></strong></div><div class="emergency-item"><span>JNTO 旅客熱線・24 小時・中文支援</span><strong><a href="tel:05038162787">050-3816-2787</a></strong></div><div class="emergency-item"><span>駐日代表處夜間急難救助</span><strong><a href="tel:08010097179">080-1009-7179</a></strong></div></div>
@@ -297,4 +298,4 @@ document.addEventListener("change", event => {
 
 render();
 fetchWeather();
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=4", { scope: "./" }).catch(() => {});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=20260920-2", { scope: "./" }).catch(() => {});
