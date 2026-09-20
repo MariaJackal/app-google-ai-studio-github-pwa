@@ -17,7 +17,7 @@
 ## 資料與外部服務
 
 - 行程內容以靜態資料保存在 `app.js`，不需要登入或後端。
-- 天氣使用 Open-Meteo 公開 forecast API；依每日主要地點逐日查詢，只請求目前可預報範圍，最近一次成功資料保存到 `localStorage`。
+- 天氣使用 Open-Meteo 公開 forecast API；依每日主要地點逐日查詢每日概況與每兩小時 hourly 預報，只請求目前可預報範圍，最近一次成功資料保存到 `localStorage`。
 - 導航與轉乘使用 Google Maps URL；Tabelog 使用區域推薦／搜尋頁連結，不抓取網站內容。
 - 預約代號與記帳資料只保存在瀏覽器的 `localStorage`。
 

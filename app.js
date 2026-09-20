@@ -93,6 +93,7 @@ const weatherLabels = {
   61: ["小雨", "☂"], 63: ["中雨", "☂"], 65: ["大雨", "☂"], 71: ["小雪", "❄"], 73: ["降雪", "❄"], 75: ["大雪", "❄"],
   80: ["陣雨", "☂"], 81: ["陣雨", "☂"], 82: ["強陣雨", "☂"], 95: ["雷雨", "⚡"], 96: ["雷雨", "⚡"], 99: ["雷雨", "⚡"]
 };
+const weatherHours = [6, 8, 10, 12, 14, 16, 18, 20, 22];
 
 const state = {
   view: "itinerary",
@@ -124,17 +125,19 @@ function mapsUrl(place, transit = false) {
 function tagHtml(tag) { return `<span class="tag tag-${tag.kind}">${escapeHtml(tag.text)}</span>`; }
 
 function weatherFor(day) {
-  return state.weather[day.date] || { label: "等待更新", symbol: "◌", temp: "--", high: "--", low: "--", rain: "--", fetchedAt: "尚未取得" };
+  const fallback = { label: "等待更新", symbol: "◌", temp: "--", high: "--", low: "--", rain: "--", fetchedAt: "尚未取得", hourly: [] };
+  return state.weather[day.date] ? { ...fallback, ...state.weather[day.date], hourly: state.weather[day.date].hourly || [] } : fallback;
 }
 
 function renderWeather(day) {
   const weather = weatherFor(day);
+  const hourly = weather.hourly.length ? weather.hourly : weatherHours.map(hour => ({ time: `${String(hour).padStart(2, "0")}:00`, temp: "--", symbol: "◌", label: "等待更新", rain: "--", pending: true }));
   return `<section class="weather-panel" aria-label="${escapeHtml(day.location)}天氣">
-    <div><div class="weather-place">${escapeHtml(day.location)} · ${escapeHtml(day.date.slice(5).replace("-", "/"))}</div>
+    <div class="weather-head"><div class="weather-copy"><div class="weather-place">${escapeHtml(day.location)} · ${escapeHtml(day.date.slice(5).replace("-", "/"))}</div>
     <div class="weather-summary">${escapeHtml(weather.label)}</div>
     <div class="weather-meta">最高 ${escapeHtml(weather.high)}°／最低 ${escapeHtml(weather.low)}° · 降雨機率 ${escapeHtml(weather.rain)}% · ${escapeHtml(weather.fetchedAt)}</div></div>
     <div class="weather-temp"><span class="weather-symbol" aria-hidden="true">${escapeHtml(weather.symbol)}</span><strong>${escapeHtml(weather.temp)}°</strong></div>
-    <button class="weather-refresh" type="button" data-action="refresh-weather">更新天氣</button>
+    </div><div class="hourly-title">每兩小時預報 · 06:00 — 22:00</div><div class="hourly-scroll" aria-label="每兩小時氣溫預報">${hourly.map(slot => `<div class="hourly-card ${slot.pending ? "is-pending" : ""}" aria-label="${escapeHtml(slot.time)} ${escapeHtml(slot.label)} ${escapeHtml(slot.temp)} 度"><span class="hourly-time">${escapeHtml(slot.time)}</span><span class="hourly-icon" aria-hidden="true">${escapeHtml(slot.symbol)}</span><strong class="hourly-temp">${escapeHtml(slot.temp)}°</strong><span class="hourly-rain">雨 ${escapeHtml(slot.rain)}%</span></div>`).join("")}</div><button class="weather-refresh" type="button" data-action="refresh-weather">更新天氣</button>
   </section>`;
 }
 
@@ -234,13 +237,20 @@ async function fetchWeather() {
   const targets = days.filter(day => day.date >= todayString && day.date <= latestForecastString);
   const results = await Promise.all(targets.map(async day => {
     const location = locations[day.locationKey];
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&start_date=${day.date}&end_date=${day.date}`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&hourly=temperature_2m,weather_code,precipitation_probability&timezone=Asia%2FTokyo&start_date=${day.date}&end_date=${day.date}`;
     try {
       const response = await fetch(url);
       if (!response.ok) throw new Error("weather request failed");
       const data = await response.json();
       const [label, symbol] = weatherLabels[data.daily.weather_code[0]] || ["天氣變化", "◌"];
-      return { date: day.date, weather: { label, symbol, temp: formatTemp((data.daily.temperature_2m_max[0] + data.daily.temperature_2m_min[0]) / 2), high: formatTemp(data.daily.temperature_2m_max[0]), low: formatTemp(data.daily.temperature_2m_min[0]), rain: formatTemp(data.daily.precipitation_probability_max[0]), fetchedAt: `更新於 ${new Date().toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit" })}` } };
+      const hourly = weatherHours.map(hour => {
+        const time = `${day.date}T${String(hour).padStart(2, "0")}:00`;
+        const index = data.hourly?.time?.indexOf(time) ?? -1;
+        if (index < 0) return { time: `${String(hour).padStart(2, "0")}:00`, temp: "--", symbol: "◌", label: "等待更新", rain: "--", pending: true };
+        const [hourLabel, hourSymbol] = weatherLabels[data.hourly.weather_code[index]] || ["天氣變化", "◌"];
+        return { time: `${String(hour).padStart(2, "0")}:00`, temp: formatTemp(data.hourly.temperature_2m[index]), symbol: hourSymbol, label: hourLabel, rain: formatTemp(data.hourly.precipitation_probability[index]) };
+      });
+      return { date: day.date, weather: { label, symbol, temp: formatTemp((data.daily.temperature_2m_max[0] + data.daily.temperature_2m_min[0]) / 2), high: formatTemp(data.daily.temperature_2m_max[0]), low: formatTemp(data.daily.temperature_2m_min[0]), rain: formatTemp(data.daily.precipitation_probability_max[0]), fetchedAt: `更新於 ${new Date().toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit" })}`, hourly } };
     } catch { return { date: day.date, weather: null }; }
   }));
   results.forEach(({ date, weather }) => { if (weather) state.weather[date] = weather; });
@@ -287,4 +297,4 @@ document.addEventListener("change", event => {
 
 render();
 fetchWeather();
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=4", { scope: "./" }).catch(() => {});
