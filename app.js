@@ -49,10 +49,11 @@ const days = [
   },
   {
     date: "2026-10-06", short: "6", weekday: "二", label: "築地／原宿／澀谷", locationKey: "tokyo", location: "東京灣／澀谷",
-    intro: "市場早餐、表參道午後與澀谷夕景；SHIBUYA SKY 建議先確認預約。",
+    intro: "市場早餐、豐洲市場、表參道午後與澀谷夕景；SHIBUYA SKY 建議先確認預約。",
     items: [
       { time: "08:00", type: "food", label: "餐廳", title: "早餐二選一", copy: "星巴克上野恩賜公園店，或 Soba & Udon Motochō。", place: "上野", tags: [{ text: "早餐", kind: "guide" }] },
-      { time: "09:30", type: "attraction", label: "景點", title: "築地市場 → 豐洲市場", copy: "先在築地吃攤販小吃，再到豐洲場外市場；市場採買留意營業時間。", place: "築地／豐洲", tags: [{ text: "必吃：玉子燒／海鮮", kind: "must" }, { text: "必買：乾貨", kind: "buy" }], guide: "兩個市場不要排太滿；築地適合邊走邊吃，豐洲適合把正餐與採買集中處理。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
+      { time: "09:00", type: "food", label: "備選早餐", title: "築地市場攤販直接吃早餐", copy: "如果不想先在上野吃早餐，也可以直接到築地市場邊走邊吃。", place: "築地市場", tags: [{ text: "必吃：玉子燒／海鮮", kind: "must" }, { text: "早餐備選", kind: "guide" }], guide: "選這個方案時可直接跳過上野早餐，保留胃口給市場攤販。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
+      { time: "10:30", type: "attraction", label: "景點", title: "豐洲市場", jp: "場外市場", copy: "第二個景點直接安排豐洲市場；市場採買留意營業時間。", place: "豐洲市場", tags: [{ text: "市場散步", kind: "guide" }, { text: "必買：乾貨", kind: "buy" }], guide: "把豐洲市場當成上午主景點，逛場外市場後再接 12:00 午餐。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
       { time: "12:00", type: "food", label: "餐廳", title: "午餐二選一", copy: "とんかつ八千代（火・木・土限定）或 つきぢ神楽寿司。", place: "築地／豐洲", tags: [{ text: "限定菜單", kind: "booking" }, { text: "必點：叉燒荷包蛋定食／壽司", kind: "must" }] },
       { time: "14:00", type: "attraction", label: "景點", title: "表參道／原宿", jp: "HARAKADO 或 Omotesando Hills", copy: "兩個室內點擇一，留時間前往澀谷。", place: "表參道／原宿", tags: [{ text: "有冷氣", kind: "guide" }, { text: "伴手禮", kind: "buy" }] },
       { time: "16:00", type: "attraction", label: "景點", title: "SHIBUYA SKY", copy: "16:00 抵達，預留安檢與入場；夕陽時段通常最熱門。", place: "SHIBUYA SKY", tags: [{ text: "重要預約", kind: "booking" }, { text: "夕景", kind: "must" }], guide: "建議提前確認電子票與入場時段；風雨天留意戶外展望台是否有動線調整。", source: "https://www.shibuya-scramble-square.com/sky/" },
