@@ -5,7 +5,7 @@ const days = [
     items: [
       { time: "05:00", type: "transit", label: "交通", title: "起床 → 小港機場", copy: "06:00 抵達小港機場，預留報到與安檢時間。", place: "小港機場", tags: [{ text: "去程", kind: "transit" }] },
       { time: "08:05", type: "transit", label: "交通", title: "亞洲航空 FD234", jp: "高雄 KHH → 成田 NRT", copy: "12:55 抵達成田機場；13:30–14:00 出關。", place: "成田機場", tags: [{ text: "航班", kind: "transit" }] },
-      { time: "14:30", type: "food", label: "餐廳", title: "川豐成田本店", jp: "Kawatoyo · 備選：駿河屋", copy: "百年鰻魚飯，抵達日本的第一餐。", place: "川豐成田本店", tags: [{ text: "必吃", kind: "must" }, { text: "鰻魚飯", kind: "buy" }], guide: "建議先確認現場候位；若人潮太多，直接切換到駿河屋。", tabelog: "https://tabelog.com/en/chiba/A1204/A120401/rstLst/", source: "https://www.naritasan.or.jp/" },
+      { time: "14:30", type: "food", label: "餐廳", title: "川豐成田本店", jp: "Kawatoyo · 備選：駿河屋", copy: "百年鰻魚飯，抵達日本的第一餐。", place: "川豐成田本店", places: [{ label: "川豐成田本店", place: "川豐成田本店" }, { label: "駿河屋（備選）", place: "駿河屋 成田" }], tags: [{ text: "必吃", kind: "must" }, { text: "鰻魚飯", kind: "buy" }], guide: "建議先確認現場候位；若人潮太多，直接切換到駿河屋。", tabelog: "https://tabelog.com/en/chiba/A1204/A120401/rstLst/", source: "https://www.naritasan.or.jp/" },
       { time: "15:30", type: "attraction", label: "景點", title: "成田山表參道散步", jp: "Naritasan Omotesando", copy: "時間充裕就逛商店街與成田山新勝寺；若需趕車，直接前往御殿場。", place: "成田山新勝寺", tags: [{ text: "攻略", kind: "guide" }, { text: "伴手禮", kind: "buy" }], guide: "表參道適合買米菓、羊羹與鐵砲漬；寺院參拜可留意御朱印。", source: "https://www.naritasan.or.jp/about/" },
       { time: "19:00", type: "food", label: "餐廳", title: "さわやか 炭烤漢堡排", copy: "靜岡名物；晚餐時段可能需要候位。", place: "さわやか 御殿場", tags: [{ text: "必點：げんこつハンバーグ", kind: "must" }, { text: "可能候位", kind: "booking" }] },
       { time: "20:00", type: "stay", label: "住宿", title: "入住 Dormy Inn Express Fujisan Gotemba", copy: "先放行李，再視體力安排溫泉與 21:00 消夜拉麵。", place: "Dormy Inn Express Fujisan Gotemba", tags: [{ text: "溫泉", kind: "guide" }] },
@@ -16,10 +16,10 @@ const days = [
     intro: "把富士山留給早晨：先看天氣，再在纜車與遊湖船中二選一。",
     items: [
       { time: "06:30", type: "food", label: "餐廳", title: "飯店早餐", copy: "早餐後整理行李與拍攝裝備，08:30 出發。", place: "Dormy Inn Express Fujisan Gotemba", tags: [{ text: "早起", kind: "guide" }] },
-      { time: "08:30", type: "attraction", label: "景點", title: "富士山全景纜車／遊湖船", jp: "Mt. Fuji Panoramic Ropeway", copy: "時間不夠時二選一；晴天優先纜車，湖面平靜時可選遊湖船。", place: "河口湖", tags: [{ text: "看天氣決定", kind: "guide" }, { text: "逆富士拍攝", kind: "must" }], guide: "官方介紹指出天上山與《咔嚓咔嚓山》故事有關；可把展望台與湖畔倒影安排在同一段。", source: "https://www.mtfujiropeway.jp/en/" },
+      { time: "08:30", type: "attraction", label: "景點", title: "富士山全景纜車／遊湖船", jp: "Mt. Fuji Panoramic Ropeway", copy: "時間不夠時二選一；晴天優先纜車，湖面平靜時可選遊湖船。", place: "河口湖", places: [{ label: "富士山全景纜車", place: "富士山全景纜車" }, { label: "河口湖遊湖船", place: "河口湖遊覧船" }], tags: [{ text: "看天氣決定", kind: "guide" }, { text: "逆富士拍攝", kind: "must" }], guide: "官方介紹指出天上山與《咔嚓咔嚓山》故事有關；可把展望台與湖畔倒影安排在同一段。", source: "https://www.mtfujiropeway.jp/en/" },
       { time: "10:45", type: "food", label: "餐廳", title: "山麓園・爐端燒", jp: "ほうとう 備選", copy: "11:00 排隊入場；若不想等，可改吃ほうとう。", place: "山麓園", tags: [{ text: "排隊入場", kind: "booking" }, { text: "必點：爐端燒／ほうとう", kind: "must" }] },
       { time: "13:00", type: "attraction", label: "景點", title: "忍野八海", jp: "Oshino Hakkai", copy: "富士山麓湧水池群；拍照時留意人潮與水池周邊動線。", place: "忍野八海", tags: [{ text: "富士山湧水", kind: "guide" }, { text: "必買：草餅／米菓", kind: "buy" }], guide: "建議先走主池群，再安排伴手禮；不要只停在入口，往內走較好拍。", source: "https://www.mtfujiropeway.jp/about/" },
-      { time: "14:30", type: "attraction", label: "購物", title: "御殿場 PREMIUM OUTLETS", copy: "晚餐可在 Outlet 解決；19:00 回飯店泡溫泉。", place: "御殿場 Outlet", tags: [{ text: "購物", kind: "buy" }, { text: "必買：限定零食", kind: "buy" }] },
+      { time: "14:30", type: "attraction", label: "購物", title: "御殿場 PREMIUM OUTLETS", copy: "晚餐可在 Outlet 解決；19:00 回飯店泡溫泉。", place: "御殿場 PREMIUM OUTLETS", tags: [{ text: "購物", kind: "buy" }, { text: "必買：限定零食", kind: "buy" }] },
       { time: "21:00", type: "food", label: "餐廳", title: "飯店免費消夜拉麵", copy: "飯店內免費提供，來到 Dormy Inn 必吃。", place: "Dormy Inn Express Fujisan Gotemba", tags: [{ text: "免費提供", kind: "booking" }, { text: "必吃", kind: "must" }] },
     ]
   },
@@ -28,12 +28,12 @@ const days = [
     intro: "火山、湖景、橫濱港未來 21 與東京夜色的一天；箱根段請抓準交通銜接。",
     items: [
       { time: "06:30", type: "food", label: "早餐", title: "Dormy Inn Express Fujisan Gotemba 早餐／11:00 前退房", jp: "Dormy Inn Express Fujisan Gotemba", copy: "飯店早餐後整理行李，最晚 11:00 前完成退房。", place: "Dormy Inn Express Fujisan Gotemba", tags: [{ text: "早起", kind: "guide" }, { text: "11:00 前退房", kind: "booking" }] },
-      { time: "09:30", type: "food", label: "餐廳", title: "大涌谷／午餐黑咖哩", jp: "Owakudani", copy: "09:30–11:30；大涌谷散步並吃黑咖哩，注意火山區公告與風勢。", place: "大涌谷", tags: [{ text: "必吃：黑咖哩", kind: "must" }, { text: "火山區", kind: "guide" }], guide: "先確認當日火山警戒與纜車運行狀況；把黑咖哩排在大涌谷停留段內。", source: "https://www.hakonenavi.jp/international/en/" },
-      { time: "12:00", type: "attraction", label: "景點", title: "蘆之湖海盜遊覽船／箱根神社／湖畔鳥居", jp: "Lake Ashi · Hakone Shrine", copy: "12:00–14:30；搭海盜遊覽船、參拜箱根神社，再拍湖畔鳥居。", place: "蘆之湖／箱根神社", tags: [{ text: "必拍：湖畔鳥居", kind: "must" }, { text: "交通：海盜遊覽船", kind: "transit" }], guide: "前往箱根神社可鎖定元箱根港；湖區移動要預留排隊與上下船時間。", source: "https://www.hakonenavi.jp/international/en/wp-content/uploads/sites/2/2025/09/traffic-guide-eng-202510.pdf" },
-      { time: "14:30", type: "attraction", label: "景點", title: "横滨港未来 21／红砖仓库／東京鐵塔", jp: "Yokohama Minato Mirai 21 · Red Brick Warehouse · Tokyo Tower", copy: "14:30–17:00；横滨港未来 21、红砖仓库，或改去東京鐵塔，當天視交通與體力決定。", place: "横滨港未来 21", tags: [{ text: "三選一", kind: "guide" }, { text: "當天決定", kind: "neutral" }] },
+      { time: "09:30", type: "food", label: "餐廳", title: "大涌谷／午餐黑咖哩", jp: "Owakudani", copy: "09:30–11:30；大涌谷散步並吃黑咖哩，注意火山區公告與風勢。", place: "大涌谷", places: [{ label: "大涌谷", place: "大涌谷" }, { label: "大涌谷黑咖哩", place: "大涌谷 黑咖哩" }], tags: [{ text: "必吃：黑咖哩", kind: "must" }, { text: "火山區", kind: "guide" }], guide: "先確認當日火山警戒與纜車運行狀況；把黑咖哩排在大涌谷停留段內。", source: "https://www.hakonenavi.jp/international/en/" },
+      { time: "12:00", type: "attraction", label: "景點", title: "蘆之湖海盜遊覽船／箱根神社／湖畔鳥居", jp: "Lake Ashi · Hakone Shrine", copy: "12:00–14:30；依序搭船、參拜與拍照。", place: "蘆之湖／箱根神社", places: [{ label: "蘆之湖海盜遊覽船", place: "蘆之湖海盜遊覽船" }, { label: "箱根神社", place: "箱根神社" }, { label: "湖畔鳥居", place: "箱根神社 湖畔鳥居" }], tags: [{ text: "必拍：湖畔鳥居", kind: "must" }, { text: "交通：海盜遊覽船", kind: "transit" }], guide: "前往箱根神社可鎖定元箱根港；湖區移動要預留排隊與上下船時間。", source: "https://www.hakonenavi.jp/international/en/wp-content/uploads/sites/2/2025/09/traffic-guide-eng-202510.pdf" },
+      { time: "14:30", type: "attraction", label: "景點", title: "横滨港未来 21／红砖仓库／東京鐵塔", jp: "Yokohama Minato Mirai 21 · Red Brick Warehouse · Tokyo Tower", copy: "14:30–17:00；三選一，當天視交通與體力決定。", place: "横滨港未来 21", places: [{ label: "横滨港未来 21", place: "横滨港未来 21" }, { label: "横滨红砖仓库", place: "横滨红砖仓库" }, { label: "東京鐵塔", place: "東京鐵塔" }], tags: [{ text: "三選一", kind: "guide" }, { text: "當天決定", kind: "neutral" }] },
       { time: "17:30", type: "stay", label: "住宿", title: "入住 PAUL HOUSE 上野館", copy: "辦理入住；地址：1 Chome-19-8 Higashiueno, Taito City, Tokyo 110-0015 日本。", place: "PAUL HOUSE 上野館, 1 Chome-19-8 Higashiueno, Taito City, Tokyo 110-0015, Japan", tags: [{ text: "住宿", kind: "guide" }, { text: "地址已整理", kind: "buy" }] },
       { time: "18:30", type: "food", label: "餐廳", title: "一頭牛燒肉 房家 上野六丁目店", jp: "和牛燒肉", copy: "已預約 18:30，請務必準時抵達；晚餐後再回上野採買。", place: "一頭牛燒肉 房家 上野六丁目店", tags: [{ text: "已預約 18:30", kind: "booking" }, { text: "必點：和牛", kind: "must" }] },
-      { time: "20:00", type: "attraction", label: "採買", title: "逛超市／秋葉原 BIC CAMERA", copy: "晚餐後視體力安排超市或秋葉原 BIC CAMERA。", place: "上野／秋葉原 BIC CAMERA", tags: [{ text: "必買：藥妝／電器", kind: "buy" }, { text: "彈性行程", kind: "neutral" }] },
+      { time: "20:00", type: "attraction", label: "採買", title: "逛超市／秋葉原 BIC CAMERA", copy: "晚餐後視體力安排採買。", place: "上野／秋葉原 BIC CAMERA", places: [{ label: "上野超市", place: "上野 超市" }, { label: "秋葉原 BIC CAMERA", place: "BIC CAMERA 秋葉原" }], tags: [{ text: "必買：藥妝／電器", kind: "buy" }, { text: "彈性行程", kind: "neutral" }] },
     ]
   },
   {
@@ -42,10 +42,10 @@ const days = [
     items: [
       { time: "08:00", type: "food", label: "餐廳", title: "早餐", copy: "建議前一晚先買好，避免早晨排隊影響淺草寺時間。", place: "上野", tags: [{ text: "前晚採買", kind: "guide" }] },
       { time: "09:00", type: "attraction", label: "景點", title: "淺草寺／雷門", jp: "Senso-ji · Kaminarimon", copy: "早上先拍雷門與仲見世，避開午後人潮。", place: "淺草寺", tags: [{ text: "必買：人形燒／雷おこし", kind: "buy" }, { text: "攻略", kind: "guide" }], guide: "仲見世適合把伴手禮一次買齊；若要參拜，先從雷門一路走進本堂。", source: "https://www.senso-ji.jp/" },
-      { time: "12:00", type: "food", label: "餐廳", title: "午餐四選一", copy: "淺草：大黑家／天彩／尾張屋雷門店；銀座：篝本店、とんかつ檍銀座 8 丁目店、挽肉屋神徳。", place: "淺草／銀座", tags: [{ text: "必點：天婦羅／蕎麥麵／拉麵／豬排／漢堡排", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1301/rstLst/" },
-      { time: "14:00", type: "attraction", label: "購物", title: "銀座逛街／UNIQLO 旗艦店", copy: "把購物集中在銀座，預留晚餐轉移時間。", place: "銀座 UNIQLO", tags: [{ text: "必買：服飾", kind: "buy" }] },
-      { time: "17:00", type: "food", label: "餐廳", title: "晚餐四選一", copy: "篝本店（拉麵）、とんかつ檍銀座 8 丁目店（豬排飯）、焼鳥 鳥よし 銀座店（烤肉）、天ぷら 阿部 銀座本店（天婦羅定食）。", place: "銀座", tags: [{ text: "必點：拉麵／豬排／烤鳥／天婦羅", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1301/rstLst/" },
-      { time: "19:00", type: "attraction", label: "採買", title: "阿美橫町藥妝採購／超市／秋葉原 BIC CAMERA", jp: "Ameyoko", copy: "19:00 回阿美橫町採買藥妝，再視體力逛超市或秋葉原 BIC CAMERA。", place: "阿美橫町／秋葉原 BIC CAMERA", tags: [{ text: "必買：藥妝／零食", kind: "buy" }, { text: "Tabelog 上野", kind: "guide" }], source: "https://tabelog.com/en/tokyo/A1311/rstLst.html" },
+      { time: "12:00", type: "food", label: "餐廳", title: "午餐四選一", copy: "淺草或銀座，依當天動線選一間。", place: "淺草／銀座", places: [{ label: "浅草 大黑家", place: "浅草 大黑家" }, { label: "浅草 天彩", place: "浅草 天彩" }, { label: "尾張屋 雷門店", place: "尾張屋 雷門店" }, { label: "銀座 篝 本店", place: "銀座 篝 本店" }, { label: "銀座 とんかつ檍 銀座 8 丁目店", place: "とんかつ檍 銀座8丁目店" }, { label: "銀座 挽肉屋 神徳", place: "銀座 挽肉屋 神徳" }], tags: [{ text: "必點：天婦羅／蕎麥麵／拉麵／豬排／漢堡排", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1301/rstLst/" },
+      { time: "14:00", type: "attraction", label: "購物", title: "銀座逛街／UNIQLO 旗艦店", copy: "把購物集中在銀座，預留晚餐轉移時間。", place: "銀座 UNIQLO", places: [{ label: "銀座逛街", place: "銀座" }, { label: "UNIQLO 旗艦店", place: "UNIQLO TOKYO 銀座" }], tags: [{ text: "必買：服飾", kind: "buy" }] },
+      { time: "17:00", type: "food", label: "餐廳", title: "晚餐四選一", copy: "依當天排隊與位置選一間。", place: "銀座", places: [{ label: "銀座 篝 本店", place: "銀座 篝 本店" }, { label: "とんかつ檍 銀座 8 丁目店", place: "とんかつ檍 銀座8丁目店" }, { label: "焼鳥 鳥よし 銀座店", place: "焼鳥 鳥よし 銀座店" }, { label: "天ぷら 阿部 銀座本店", place: "天ぷら 阿部 銀座本店" }], tags: [{ text: "必點：拉麵／豬排／烤鳥／天婦羅", kind: "must" }, { text: "Tabelog 比較", kind: "guide" }], tabelog: "https://tabelog.com/en/tokyo/A1301/rstLst/" },
+      { time: "19:00", type: "attraction", label: "採買", title: "阿美橫町藥妝採購／超市／秋葉原 BIC CAMERA", jp: "Ameyoko", copy: "19:00 回阿美橫町採買，再視體力安排超市或秋葉原。", place: "阿美橫町", places: [{ label: "阿美橫町藥妝", place: "阿美橫町" }, { label: "上野超市", place: "上野 超市" }, { label: "秋葉原 BIC CAMERA", place: "BIC CAMERA 秋葉原" }], tags: [{ text: "必買：藥妝／零食", kind: "buy" }, { text: "Tabelog 上野", kind: "guide" }], source: "https://tabelog.com/en/tokyo/A1311/rstLst.html" },
     ]
   },
   {
@@ -55,11 +55,11 @@ const days = [
       { time: "07:00", type: "transit", label: "提醒", title: "早點起床", copy: "08:00 出發，直接前往築地市場攤販。", place: "上野 → 築地市場", tags: [{ text: "早起", kind: "guide" }, { text: "搭地鐵", kind: "transit" }] },
       { time: "08:00", type: "food", label: "早餐", title: "築地市場攤販逛街小吃", copy: "直接到築地市場邊走邊吃早餐，保留胃口給市場攤販。", place: "築地市場", tags: [{ text: "必吃：玉子燒／海鮮", kind: "must" }, { text: "市場早餐", kind: "guide" }], guide: "早上先逛攤販，不另外安排上野早餐；可依現場排隊狀況彈性選擇。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
       { time: "10:30", type: "attraction", label: "景點", title: "豐洲千客萬來", jp: "場外市場", copy: "搭日本計程車前往豐洲千客萬來·場外市場，留意市場營業時間。", place: "豐洲千客萬來", tags: [{ text: "交通：日本計程車", kind: "transit" }, { text: "市場散步", kind: "guide" }] , guide: "把豐洲千客萬來當成上午第二個市場景點，逛完直接銜接 12:00 午餐。", tabelog: "https://tabelog.com/en/tokyo/A1313/rstLst/" },
-      { time: "12:00", type: "food", label: "餐廳", title: "午餐三選一", copy: "1. とんかつ八千代（叉燒荷包蛋定食，火・木・土限定）；2. つきぢ神楽寿司（壽司）；3. 東京車站・銀座篝 大手町店。", place: "豐洲／東京車站／銀座", tags: [{ text: "限定菜單", kind: "booking" }, { text: "必點：叉燒荷包蛋／壽司／拉麵", kind: "must" }] },
-      { time: "14:00", type: "attraction", label: "景點", title: "東京車站／皇居", copy: "皇居禮品部列為必買：真皮皮夾。", place: "東京車站／皇居", tags: [{ text: "必買：真皮皮夾", kind: "buy" }, { text: "攻略", kind: "guide" }] },
-      { time: "16:00", type: "attraction", label: "景點", title: "表參道／六本木／東京鐵塔公園", copy: "三選一，當天依體力與交通決定；若選六本木，可考慮銀座篝六本木新城店。", place: "表參道／六本木／東京鐵塔", tags: [{ text: "當天決定", kind: "neutral" }, { text: "備選餐廳：篝六本木新城店", kind: "guide" }] },
-      { time: "18:00", type: "food", label: "餐廳", title: "晚餐三選一", copy: "AFURI（柚子鹽拉麵）、回し寿司活 西武渋谷店（壽司），或回淺草吃。", place: "六本木／澀谷／淺草", tags: [{ text: "必點：柚子鹽拉麵／壽司", kind: "must" }, { text: "當天決定", kind: "neutral" }] },
-      { time: "20:00", type: "attraction", label: "採買", title: "補藥裝／逛超市／秋葉原 BIC CAMERA", copy: "補齊藥妝與伴手禮，視體力安排超市或秋葉原 BIC CAMERA。", place: "上野／秋葉原 BIC CAMERA", tags: [{ text: "必買：藥妝／電器", kind: "buy" }] },
+      { time: "12:00", type: "food", label: "餐廳", title: "午餐三選一", copy: "市場午餐或改去東京車站吃拉麵，依當天動線決定。", place: "豐洲／東京車站／銀座", places: [{ label: "とんかつ八千代（叉燒荷包蛋定食）", place: "とんかつ八千代" }, { label: "つきぢ神楽寿司（壽司）", place: "つきぢ神楽寿司" }, { label: "東京車站・銀座篝 大手町店", place: "銀座 篝 大手町店" }], tags: [{ text: "限定菜單：火・木・土", kind: "booking" }, { text: "必點：叉燒荷包蛋／壽司／拉麵", kind: "must" }] },
+      { time: "14:00", type: "attraction", label: "景點", title: "東京車站／皇居", copy: "皇居禮品部列為必買：真皮皮夾。", place: "東京車站／皇居", places: [{ label: "東京車站", place: "東京車站" }, { label: "皇居", place: "皇居" }, { label: "皇居禮品部・真皮皮夾", place: "皇居 禮品部" }], tags: [{ text: "必買：真皮皮夾", kind: "buy" }, { text: "攻略", kind: "guide" }] },
+      { time: "16:00", type: "attraction", label: "景點", title: "表參道／六本木／東京鐵塔公園", copy: "三選一，當天依體力與交通決定；若選六本木，可考慮銀座篝六本木新城店。", place: "表參道／六本木／東京鐵塔", places: [{ label: "表參道", place: "表參道" }, { label: "六本木", place: "六本木" }, { label: "東京鐵塔公園", place: "東京鐵塔" }, { label: "銀座篝 六本木新城店（備選餐廳）", place: "銀座 篝 六本木ヒルズ店" }], tags: [{ text: "當天決定", kind: "neutral" }, { text: "備選餐廳：篝六本木新城店", kind: "guide" }] },
+      { time: "18:00", type: "food", label: "餐廳", title: "晚餐三選一", copy: "依當天所在區域選一間，或回淺草吃。", place: "六本木／澀谷／淺草", places: [{ label: "AFURI（柚子鹽拉麵）", place: "AFURI" }, { label: "回し寿司活 西武渋谷店（壽司）", place: "回し寿司活 西武渋谷店" }, { label: "回淺草吃", place: "淺草 餐廳" }], tags: [{ text: "必點：柚子鹽拉麵／壽司", kind: "must" }, { text: "當天決定", kind: "neutral" }] },
+      { time: "20:00", type: "attraction", label: "採買", title: "補藥裝／逛超市／秋葉原 BIC CAMERA", copy: "補齊藥妝與伴手禮，視體力安排採買。", place: "上野／秋葉原 BIC CAMERA", places: [{ label: "補藥妝", place: "上野 藥妝" }, { label: "上野超市", place: "上野 超市" }, { label: "秋葉原 BIC CAMERA", place: "BIC CAMERA 秋葉原" }], tags: [{ text: "必買：藥妝／電器", kind: "buy" }] },
     ]
   },
   {
@@ -118,12 +118,21 @@ function escapeHtml(value = "") {
   return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
 }
 
-function mapsUrl(place, transit = false) {
+function mapsSearchUrl(place) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place + ", Japan")}`;
+}
+
+function directionsUrl(place, transit = false) {
   const mode = transit ? "&travelmode=transit" : "";
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place + ", Japan")}${mode}`;
 }
 
 function tagHtml(tag) { return `<span class="tag tag-${tag.kind}">${escapeHtml(tag.text)}</span>`; }
+
+function placeLinks(item) {
+  const places = item.places || [{ label: item.title, place: item.place }];
+  return `<h3 class="place-list">${places.map(({ label, place }) => `<span class="place-option"><a class="place-link" href="${escapeHtml(mapsSearchUrl(place))}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a></span>`).join("")}</h3>`;
+}
 
 function weatherFor(day) {
   const fallback = { label: "等待更新", symbol: "◌", temp: "--", high: "--", low: "--", rain: "--", fetchedAt: "尚未取得", hourly: [] };
@@ -149,23 +158,22 @@ function renderDayButtons() {
 function renderScheduleCard(item, index) {
   const detailId = `detail-${state.selectedDate}-${index}`;
   const tags = (item.tags || []).map(tagHtml).join("");
-  const isMapCard = item.type === "food" || item.type === "attraction";
-  const actions = isMapCard
-    ? [`<span class="map-hint">點擊卡片開啟 Google Maps</span>`, `<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`]
+  const isPlaceCard = item.type === "food" || item.type === "attraction";
+  const actions = isPlaceCard
+    ? [`<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`]
     : [
-      `<a class="action-link primary" href="${mapsUrl(item.place)}" target="_blank" rel="noreferrer">導航</a>`,
-      `<a class="action-link subtle" href="${mapsUrl(item.place, true)}" target="_blank" rel="noreferrer">地鐵轉乘</a>`,
+      `<a class="action-link primary" href="${directionsUrl(item.place)}" target="_blank" rel="noreferrer">導航</a>`,
+      `<a class="action-link subtle" href="${directionsUrl(item.place, true)}" target="_blank" rel="noreferrer">地鐵轉乘</a>`,
       `<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`
     ];
   const links = [item.tabelog ? `<a class="source-link" href="${item.tabelog}" target="_blank" rel="noreferrer">查看 Tabelog 推薦</a>` : "", item.source ? `<a class="source-link" href="${item.source}" target="_blank" rel="noreferrer">官方攻略</a>` : ""].filter(Boolean).join(" · ");
-  const mapAttributes = isMapCard ? ` is-map-card" role="link" tabindex="0" data-map-place="${escapeHtml(mapsUrl(item.place))}" aria-label="${escapeHtml(item.title)}，開啟 Google Maps` : "";
-  return `<article class="schedule-card type-${escapeHtml(item.type)}${mapAttributes}">
+  return `<article class="schedule-card type-${escapeHtml(item.type)}">
     <div class="card-topline"><span class="type-pill">${escapeHtml(item.label)}</span><time class="time">${escapeHtml(item.time)}</time></div>
-    <h3>${escapeHtml(item.title)}</h3>${item.jp ? `<p class="jp-name">${escapeHtml(item.jp)}</p>` : ""}
+    ${isPlaceCard ? placeLinks(item) : `<h3>${escapeHtml(item.title)}</h3>`}${item.jp ? `<p class="jp-name">${escapeHtml(item.jp)}</p>` : ""}
     <p class="card-copy">${escapeHtml(item.copy)}</p>
     <div class="card-tags">${tags}</div>
     <div class="card-actions">${actions.join("")}</div>
-    <div class="card-detail" id="${detailId}" hidden><p>${escapeHtml(item.guide || (isMapCard ? "點擊卡片即可直接開啟 Google Maps。" : "已將這個地點放進今日動線；點導航可直接開啟地圖。"))}</p>${links ? `<div>${links}</div>` : ""}</div>
+    <div class="card-detail" id="${detailId}" hidden><p>${escapeHtml(item.guide || "已將這個地點放進今日動線；點選店家或景點名稱即可開啟 Google Maps。")}</p>${links ? `<div>${links}</div>` : ""}</div>
   </article>`;
 }
 
@@ -266,11 +274,6 @@ async function fetchWeather() {
 }
 
 document.addEventListener("click", event => {
-  const mapCard = event.target.closest("[data-map-place]");
-  if (mapCard && !event.target.closest("a, button, input, select, textarea")) {
-    window.open(mapCard.dataset.mapPlace, "_blank", "noopener,noreferrer");
-    return;
-  }
   const viewButton = event.target.closest("[data-view]");
   if (viewButton) { state.view = viewButton.dataset.view; render(); main.focus(); return; }
   const dateButton = event.target.closest("[data-date]");
@@ -286,13 +289,6 @@ document.addEventListener("click", event => {
   }
   if (action.dataset.action === "refresh-weather") fetchWeather();
   if (action.dataset.action === "delete-expense") { state.expenses = state.expenses.filter(item => item.id !== action.dataset.id); save("tokyo-trip-expenses", state.expenses); render(); notify("已刪除這筆記帳"); }
-});
-
-document.addEventListener("keydown", event => {
-  const mapCard = event.target.closest("[data-map-place]");
-  if (!mapCard || event.target.closest("a, button, input, select, textarea") || !["Enter", " "].includes(event.key)) return;
-  event.preventDefault();
-  window.open(mapCard.dataset.mapPlace, "_blank", "noopener,noreferrer");
 });
 
 document.addEventListener("submit", event => {
@@ -314,4 +310,4 @@ document.addEventListener("change", event => {
 
 render();
 fetchWeather();
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=20260920-3", { scope: "./" }).catch(() => {});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=20260920-4", { scope: "./" }).catch(() => {});

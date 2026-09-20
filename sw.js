@@ -1,4 +1,4 @@
-const CACHE_NAME = "tokyo-trip-pwa-v20260920-3";
+const CACHE_NAME = "tokyo-trip-pwa-v20260920-4";
 const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./favicon.svg"];
 
 self.addEventListener("install", event => {
