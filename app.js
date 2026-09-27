@@ -95,14 +95,19 @@ const weatherLabels = {
   80: ["陣雨", "☂"], 81: ["陣雨", "☂"], 82: ["強陣雨", "☂"], 95: ["雷雨", "⚡"], 96: ["雷雨", "⚡"], 99: ["雷雨", "⚡"]
 };
 const weatherHours = [6, 8, 10, 12, 14, 16, 18, 20, 22];
+const weatherPhotos = {
+  "2026-10-02": { src: "./assets/weather/fuji-kawaguchi.jpg", position: "center 100%", place: "富士山・河口湖", author: "Subramaniam K V", license: "CC BY 3.0", source: "https://commons.wikimedia.org/wiki/File:Mount_Fuji_from_Lake_Kawaguchi.jpg" },
+  "2026-10-03": { src: "./assets/weather/hakone-lake-ashi.jpg", position: "center 20%", place: "箱根・蘆之湖", author: "Kentagon", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:LakeAshi_and_MtFuji_Hakone.JPG" },
+  "2026-10-04": { src: "./assets/weather/ueno-park.jpg", position: "center 42%", place: "上野公園", author: "Sjaak Kempe", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:20130930_10_Tokyo_-_Ueno_Park_(10377714466).jpg" },
+  "2026-10-05": { src: "./assets/weather/asakusa-sensoji.jpg", position: "center 28%", place: "淺草寺", author: "Bernard Spragg. NZ", license: "Public domain", source: "https://commons.wikimedia.org/wiki/File:Sens%C5%8D-ji._Asakusa_Tokyo._(41781495365).jpg" },
+  "2026-10-06": { src: "./assets/weather/tokyo-station.jpg", position: "center 45%", place: "東京車站", author: "Ore Sama", license: "CC BY 2.0", source: "https://commons.wikimedia.org/wiki/File:Tokyo_Station_Marunouchi_Entrance_01.jpg" },
+  "2026-10-07": { src: "./assets/weather/narita-airport.jpg", position: "center 40%", place: "成田機場", author: "LMP 2001", license: "CC BY-SA 4.0", source: "https://commons.wikimedia.org/wiki/File:Narita_Airport_Terminal_2_front_2025-05-28.jpg" }
+};
 
 const state = {
   view: "itinerary",
   selectedDate: days[0].date,
   weather: load("tokyo-trip-weather", {}),
-  notes: load("tokyo-trip-notes", {}),
-  mapsApiKey: load("tokyo-trip-maps-key", ""),
-  geocodes: load("tokyo-trip-geocodes", {}),
   expenses: load("tokyo-trip-expenses", []),
   reservations: load("tokyo-trip-reservations", { hotel: "", yakiniku: "" })
 };
@@ -110,7 +115,6 @@ const state = {
 const main = document.querySelector("#app-main");
 const toast = document.querySelector("#toast");
 let toastTimer;
-let mapsApiPromise;
 let photoDbPromise;
 
 function load(key, fallback) {
@@ -195,87 +199,6 @@ async function cropPhoto(file) {
   return new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("image export failed")), "image/jpeg", .86));
 }
 
-function renderMapPanel(day) {
-  const places = day.items.flatMap(item => {
-    if (item.type === "transit") return [];
-    return (item.places || [{ label: item.title, place: item.place }]).map(place => ({ ...place, time: item.time }));
-  }).filter(place => place.place).filter((place, index, all) => all.findIndex(candidate => candidate.place === place.place) === index);
-  const links = places.map(place => `<a class="map-stop-link" href="${escapeHtml(mapsSearchUrl(place.place))}" target="_blank" rel="noreferrer"><span>${escapeHtml(place.time)}</span>${escapeHtml(place.label)}</a>`).join("");
-  return `<section class="map-panel" aria-label="${escapeHtml(day.date)}行程地圖">
-    <div class="map-heading"><div><p class="kicker">TODAY'S MAP</p><h2>${escapeHtml(day.short)}日・${escapeHtml(day.label)}</h2></div><span>${places.length} 個地點</span></div>
-    ${state.mapsApiKey ? `<div id="trip-map" class="map-canvas" role="region" aria-label="${escapeHtml(day.date)} Google 地圖"></div><p class="map-message" id="map-message" aria-live="polite">正在載入 Google 地圖…</p>` : `<div class="map-unavailable"><div class="map-unavailable-copy"><span class="map-pin" aria-hidden="true">⌖</span><strong>互動地圖尚未啟用</strong><span>先設定 Google Maps API 金鑰，就能在地圖上標出當日地點。</span><button class="action-button subtle" type="button" data-action="open-map-settings">設定地圖</button></div><div class="map-stops" aria-label="今日地點，點選開啟 Google Maps">${links}</div></div>`}
-    ${state.mapsApiKey ? `<div class="map-stop-strip">${links}</div>` : ""}
-  </section>`;
-}
-
-function mapPlacesForDay(day) {
-  return day.items.flatMap(item => item.type === "transit" ? [] : (item.places || [{ label: item.title, place: item.place }]).filter(entry => entry.place).map(entry => ({ ...entry, time: item.time })));
-}
-
-function loadGoogleMapsApi(key) {
-  if (window.google?.maps) return Promise.resolve();
-  if (mapsApiPromise) return mapsApiPromise;
-  mapsApiPromise = new Promise((resolve, reject) => {
-    window.__tripMapsReady = resolve;
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=__tripMapsReady&loading=async`;
-    script.onerror = () => reject(new Error("Google Maps could not be loaded"));
-    document.head.append(script);
-  });
-  return mapsApiPromise;
-}
-
-async function mountGoogleMap(day) {
-  const container = document.querySelector("#trip-map");
-  if (!container || !state.mapsApiKey) return;
-  const message = document.querySelector("#map-message");
-  try {
-    await loadGoogleMapsApi(state.mapsApiKey);
-    if (!container.isConnected) return;
-    const map = new google.maps.Map(container, {
-      center: { lat: 35.6812, lng: 139.7671 }, zoom: 11, mapTypeControl: false,
-      streetViewControl: false, fullscreenControl: false, clickableIcons: true
-    });
-    const bounds = new google.maps.LatLngBounds();
-    const places = mapPlacesForDay(day).filter((place, index, all) => all.findIndex(candidate => candidate.place === place.place) === index);
-    const geocoder = new google.maps.Geocoder();
-    let placed = 0;
-    await Promise.all(places.map(place => new Promise(resolve => {
-      const addMarker = position => {
-        const marker = new google.maps.Marker({ map, position, title: place.label });
-        const info = new google.maps.InfoWindow({ content: `<strong>${escapeHtml(place.time)} · ${escapeHtml(place.label)}</strong>` });
-        marker.addListener("click", () => info.open({ map, anchor: marker }));
-        bounds.extend(position);
-        placed += 1;
-      };
-      const cached = state.geocodes[place.place];
-      if (cached) {
-        addMarker(new google.maps.LatLng(cached.lat, cached.lng));
-        resolve();
-        return;
-      }
-      geocoder.geocode({ address: `${place.place}, Japan` }, (results, status) => {
-        if (status === "OK" && results[0] && container.isConnected) {
-          const position = results[0].geometry.location;
-          state.geocodes[place.place] = { lat: position.lat(), lng: position.lng() };
-          addMarker(position);
-        }
-        resolve();
-      });
-    })));
-    save("tokyo-trip-geocodes", state.geocodes);
-    if (!container.isConnected) return;
-    if (placed) {
-      map.fitBounds(bounds);
-      if (placed === 1) map.setZoom(14);
-      if (message) message.hidden = true;
-    } else if (message) message.textContent = "無法辨識這天的地點，仍可點選下方地名開啟 Google Maps。";
-  } catch {
-    if (message) message.textContent = "Google 地圖載入失敗，請確認 API 金鑰與網域限制設定。";
-  }
-}
-
 function placeLinks(item) {
   const places = item.places || [{ label: item.title, place: item.place }];
   return `<h3 class="place-list">${places.map(({ label, place }) => `<span class="place-option"><a class="place-link" href="${escapeHtml(mapsSearchUrl(place))}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a></span>`).join("")}</h3>`;
@@ -286,23 +209,23 @@ function weatherFor(day) {
   return state.weather[day.date] ? { ...fallback, ...state.weather[day.date], hourly: state.weather[day.date].hourly || [] } : fallback;
 }
 
-function weatherScene(weather) {
+function weatherScene(day, weather) {
+  const photo = weatherPhotos[day.date];
   const label = weather.label || "";
-  if (/雨|雷/.test(label)) return `<svg class="weather-scene" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="rain-sky" x2="0" y2="1"><stop stop-color="#8aa5ad"/><stop offset="1" stop-color="#d7ded7"/></linearGradient></defs><rect width="800" height="360" fill="url(#rain-sky)"/><path d="M0 265 Q170 190 340 268 T800 245 V360 H0Z" fill="#7e9a8a"/><path d="M0 305 Q220 230 430 306 T800 275 V360 H0Z" fill="#526f67"/><g fill="#f4f5f0" opacity=".92"><ellipse cx="360" cy="115" rx="90" ry="33"/><ellipse cx="425" cy="105" rx="67" ry="42"/><ellipse cx="480" cy="120" rx="66" ry="28"/></g><g stroke="#ecf5f4" stroke-width="5" stroke-linecap="round" opacity=".7"><path d="M355 163l-10 22M405 167l-10 22M455 165l-10 22M505 161l-10 22"/></g></svg>`;
-  if (/雪/.test(label)) return `<svg class="weather-scene" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="800" height="360" fill="#c5d8dc"/><circle cx="610" cy="84" r="39" fill="#f8f2dd"/><path d="M0 250 Q180 180 360 250 T800 235 V360 H0Z" fill="#e9eee7"/><path d="M0 300 Q200 225 420 300 T800 270 V360 H0Z" fill="#d7e2dd"/><g fill="#fff" opacity=".8"><circle cx="270" cy="90" r="4"/><circle cx="430" cy="65" r="5"/><circle cx="540" cy="165" r="4"/><circle cx="685" cy="205" r="5"/><circle cx="180" cy="190" r="4"/></g></svg>`;
-  if (/晴/.test(label)) return `<svg class="weather-scene" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="clear-sky" x2="0" y2="1"><stop stop-color="#9bc8d1"/><stop offset="1" stop-color="#e6dfc6"/></linearGradient></defs><rect width="800" height="360" fill="url(#clear-sky)"/><circle cx="620" cy="82" r="43" fill="#f3d28c"/><path d="M0 252 Q170 190 350 260 T800 235 V360 H0Z" fill="#8ca99a"/><path d="M0 300 Q220 230 430 304 T800 270 V360 H0Z" fill="#627f70"/><g fill="#fffdf2" opacity=".84"><ellipse cx="220" cy="127" rx="65" ry="18"/><ellipse cx="276" cy="124" rx="42" ry="25"/></g></svg>`;
-  return `<svg class="weather-scene" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="cloud-sky" x2="0" y2="1"><stop stop-color="#abbec2"/><stop offset="1" stop-color="#e5e0d2"/></linearGradient></defs><rect width="800" height="360" fill="url(#cloud-sky)"/><circle cx="630" cy="82" r="34" fill="#efe4c5" opacity=".7"/><g fill="#f3f3ed" opacity=".86"><ellipse cx="330" cy="116" rx="85" ry="29"/><ellipse cx="395" cy="105" rx="61" ry="39"/><ellipse cx="454" cy="121" rx="69" ry="27"/></g><path d="M0 258 Q170 190 340 260 T800 240 V360 H0Z" fill="#92a99a"/><path d="M0 305 Q210 230 430 306 T800 275 V360 H0Z" fill="#637f70"/></svg>`;
+  const mood = /雨|雷|霧/.test(label) ? "is-rainy" : /雪/.test(label) ? "is-snowy" : /雲|陰/.test(label) ? "is-cloudy" : "is-clear";
+  return `<img class="weather-scene" src="${photo.src}" alt="" aria-hidden="true" style="object-position:${photo.position}"><span class="weather-atmosphere ${mood}" aria-hidden="true"></span>`;
 }
 
 function renderWeather(day) {
   const weather = weatherFor(day);
   const hourly = weather.hourly.length ? weather.hourly : weatherHours.map(hour => ({ time: `${String(hour).padStart(2, "0")}:00`, temp: "--", symbol: "◌", label: "等待更新", rain: "--", pending: true }));
+  const photo = weatherPhotos[day.date];
   return `<section class="weather-panel" aria-label="${escapeHtml(day.location)}天氣">
-    ${weatherScene(weather)}<div class="weather-content"><div class="weather-head"><div class="weather-copy"><div class="weather-place">${escapeHtml(day.location)} · ${escapeHtml(day.date.slice(5).replace("-", "/"))}</div>
+    ${weatherScene(day, weather)}<div class="weather-content"><div class="weather-head"><div class="weather-copy"><div class="weather-place">${escapeHtml(day.location)} · ${escapeHtml(day.date.slice(5).replace("-", "/"))}</div>
     <div class="weather-summary">${escapeHtml(weather.label)}</div>
     <div class="weather-meta">最高 ${escapeHtml(weather.high)}°／最低 ${escapeHtml(weather.low)}° · ${escapeHtml(weather.fetchedAt)}</div></div>
     <div class="weather-temp"><span class="weather-symbol" aria-hidden="true">${escapeHtml(weather.symbol)}</span><strong>${escapeHtml(weather.temp)}°</strong><span class="current-rain">雨 ${escapeHtml(weather.rain)}%</span></div>
-    </div><div class="hourly-title">每兩小時預報 · 06:00 — 22:00</div><div class="hourly-scroll" aria-label="每兩小時氣溫預報">${hourly.map(slot => `<div class="hourly-card ${slot.pending ? "is-pending" : ""}" aria-label="${escapeHtml(slot.time)} ${escapeHtml(slot.label)} ${escapeHtml(slot.temp)} 度，降雨 ${escapeHtml(slot.rain)}%"><span class="hourly-time">${escapeHtml(slot.time)}</span><span class="hourly-icon" aria-hidden="true">${escapeHtml(slot.symbol)}</span><strong class="hourly-temp">${escapeHtml(slot.temp)}°</strong><span class="hourly-rain">雨 ${escapeHtml(slot.rain)}%</span></div>`).join("")}</div><button class="weather-refresh" type="button" data-action="refresh-weather">更新天氣</button></div>
+    </div><div class="hourly-title">每兩小時預報 · 06:00 — 22:00</div><div class="hourly-scroll" aria-label="每兩小時氣溫預報">${hourly.map(slot => `<div class="hourly-card ${slot.pending ? "is-pending" : ""}" aria-label="${escapeHtml(slot.time)} ${escapeHtml(slot.label)} ${escapeHtml(slot.temp)} 度，降雨 ${escapeHtml(slot.rain)}%"><span class="hourly-time">${escapeHtml(slot.time)}</span><span class="hourly-icon" aria-hidden="true">${escapeHtml(slot.symbol)}</span><strong class="hourly-temp">${escapeHtml(slot.temp)}°</strong><span class="hourly-rain">雨 ${escapeHtml(slot.rain)}%</span></div>`).join("")}</div><button class="weather-refresh" type="button" data-action="refresh-weather">更新天氣</button><div class="weather-credit"><span>${escapeHtml(photo.place)}・實景</span><a href="${escapeHtml(photo.source)}" target="_blank" rel="noreferrer">${escapeHtml(photo.author)} · ${escapeHtml(photo.license)}</a></div></div>
   </section>`;
 }
 
@@ -311,35 +234,27 @@ function renderDayButtons() {
 }
 
 function renderScheduleCard(item, index) {
-  const detailId = `detail-${state.selectedDate}-${index}`;
   const key = photoKey(state.selectedDate, index);
   const inputId = `photo-${state.selectedDate}-${index}`;
   const tags = (item.tags || []).map(tagHtml).join("");
-  const isPlaceCard = item.type === "food" || item.type === "attraction";
-  const actions = isPlaceCard
-    ? [`<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`]
-    : [
+  const actions = item.type === "food" || item.type === "attraction" ? [] : [
       `<a class="action-link primary" href="${directionsUrl(item.place)}" target="_blank" rel="noreferrer">導航</a>`,
-      `<a class="action-link subtle" href="${directionsUrl(item.place, true)}" target="_blank" rel="noreferrer">地鐵轉乘</a>`,
-      `<button class="action-button subtle" type="button" data-action="toggle-detail" data-detail="${detailId}" aria-expanded="false" aria-controls="${detailId}">看筆記</button>`
+      `<a class="action-link subtle" href="${directionsUrl(item.place, true)}" target="_blank" rel="noreferrer">地鐵轉乘</a>`
     ];
   const links = [item.tabelog ? `<a class="source-link" href="${item.tabelog}" target="_blank" rel="noreferrer">查看 Tabelog 推薦</a>` : "", item.source ? `<a class="source-link" href="${item.source}" target="_blank" rel="noreferrer">官方攻略</a>` : ""].filter(Boolean).join(" · ");
-  const note = state.notes[key] ?? item.guide ?? "已將這個地點放進今日動線；可補充備註，點選店家或景點名稱即可開啟 Google Maps。";
   return `<div class="timeline-row type-${escapeHtml(item.type)}"><time class="timeline-time">${escapeHtml(item.time)}</time><article class="schedule-card type-${escapeHtml(item.type)}">
     <div class="schedule-layout"><div class="schedule-info"><div class="card-topline"><span class="type-pill">${escapeHtml(item.label)}</span></div>
-    ${isPlaceCard ? placeLinks(item) : `<h3>${escapeHtml(item.title)}</h3>`}${item.jp ? `<p class="jp-name">${escapeHtml(item.jp)}</p>` : ""}
-    <p class="card-copy">${escapeHtml(item.copy)}</p><div class="card-tags">${tags}</div><div class="card-actions">${actions.join("")}</div>
-    <div class="card-detail" id="${detailId}" hidden><label class="note-label" for="note-${state.selectedDate}-${index}">我的筆記</label><textarea class="note-editor" id="note-${state.selectedDate}-${index}" data-note-key="${escapeHtml(key)}" rows="3">${escapeHtml(note)}</textarea><span class="note-saved">自動保存在這台裝置</span>${links ? `<div class="note-links">${links}</div>` : ""}</div></div>
+    ${item.type === "food" || item.type === "attraction" ? placeLinks(item) : `<h3>${escapeHtml(item.title)}</h3>`}${item.jp ? `<p class="jp-name">${escapeHtml(item.jp)}</p>` : ""}
+    <p class="card-copy">${escapeHtml(item.copy)}</p><div class="card-tags">${tags}</div>${links ? `<div class="card-links">${links}</div>` : ""}${actions.length ? `<div class="card-actions">${actions.join("")}</div>` : ""}</div>
     <div class="photo-slot"><button class="photo-button" type="button" data-action="open-photo" data-input="${inputId}" aria-label="為${escapeHtml(item.title)}新增或更換照片"><img class="photo-preview" data-photo-preview="${escapeHtml(key)}" alt="" hidden><span class="photo-placeholder"><span aria-hidden="true">＋</span><small>加照片</small></span></button><input id="${inputId}" class="photo-input" type="file" accept="image/*" data-photo-input="${escapeHtml(key)}" hidden></div></div>
   </article></div>`;
 }
 
 function renderItinerary() {
   const day = days.find(entry => entry.date === state.selectedDate) || days[0];
-  main.innerHTML = `${renderMapPanel(day)}${renderDayButtons()}${renderWeather(day)}
-    <div class="section-heading"><div><p class="kicker">${escapeHtml(day.date.slice(5).replace("-", "/"))} · ${escapeHtml(day.weekday)}</p><h2>今日行程</h2></div><p>${day.items.length} 個節點</p></div>
+  main.innerHTML = `${renderWeather(day)}${renderDayButtons()}
+    <div class="section-heading"><div><p class="kicker">${escapeHtml(day.date.slice(5).replace("-", "/"))} · ${escapeHtml(day.weekday)}</p><h2>今日行程</h2></div></div>
     <section class="timeline" aria-label="${escapeHtml(day.date)}行程時間軸">${day.items.map(renderScheduleCard).join("")}</section>`;
-  mountGoogleMap(day);
   hydratePhotos();
 }
 
@@ -366,7 +281,6 @@ function renderTools() {
   const expenseRows = state.expenses.length ? state.expenses.slice().reverse().map(expense => `<div class="expense-row"><div class="expense-info"><strong>${escapeHtml(expense.item)}</strong><span>${escapeHtml(expense.category)} · ${escapeHtml(expense.date)}</span></div><span class="expense-amount">${Number(expense.amount).toLocaleString()} ${escapeHtml(expense.currency)}</span><button class="delete-expense" type="button" data-action="delete-expense" data-id="${escapeHtml(expense.id)}" aria-label="刪除 ${escapeHtml(expense.item)}">刪除</button></div>`).join("") : `<p class="empty-note">還沒有記帳，先記下第一筆旅費吧。</p>`;
   main.innerHTML = `<div class="view-hero"><p class="kicker">TRIP TOOLS · 行前與旅中</p><h2>重要的事，放在手邊。</h2><p>航班、住宿、緊急電話與花費都能在手機上快速查看；預約代號只保存在這台裝置。</p></div>
     <div class="tool-stack">
-      <section class="tool-card map-settings" id="map-settings"><h3>Google 地圖設定 <span>互動地圖</span></h3><p>互動地圖需要 Google Maps API 金鑰；請在 Google Cloud 啟用 Maps JavaScript API 與 Geocoding API，並為金鑰限制可用 API、網站來源與用量預算。Google Maps 依用量計費；已定位的地點會存在本機，切換日期時不會重複查地址。金鑰只保存在這台裝置，不會上傳到 GitHub；正式網站與其他手機需各自設定。GitHub Pages 來源可設為 <code>https://mariajackal.github.io/*</code>。</p><div class="map-key-row"><label for="maps-api-key">Google Maps API 金鑰</label><input class="field" id="maps-api-key" type="password" autocomplete="off" value="${escapeHtml(state.mapsApiKey)}" placeholder="貼上 API 金鑰"><button class="expense-submit" type="button" data-action="save-map-key">保存金鑰</button></div><div class="guide-links"><a class="source-link" href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noreferrer">官方金鑰設定</a><a class="source-link" href="https://developers.google.com/maps/billing-and-pricing/pricing" target="_blank" rel="noreferrer">官方用量與費率</a></div></section>
       <section class="tool-card"><h3>航班資訊 <span>FD234 / FD235</span></h3><p>亞洲航空 · 去回程</p>
         <div class="flight-row"><div class="flight-direction">去程<strong>08:05</strong><span>KHH 高雄</span></div><div class="flight-arrow" aria-hidden="true">→</div><div class="flight-meta">10/02（五）<strong>12:55</strong><span>NRT 成田</span></div></div>
         <div class="flight-row"><div class="flight-direction">回程<strong>13:55</strong><span>NRT 成田</span></div><div class="flight-arrow" aria-hidden="true">→</div><div class="flight-meta">10/07（三）<strong>17:05</strong><span>KHH 高雄</span></div></div>
@@ -453,29 +367,7 @@ document.addEventListener("click", event => {
   if (dateButton) { state.selectedDate = dateButton.dataset.date; state.view = "itinerary"; render(); return; }
   const action = event.target.closest("[data-action]");
   if (!action) return;
-  if (action.dataset.action === "toggle-detail") {
-    const detail = document.getElementById(action.dataset.detail);
-    const expanded = action.getAttribute("aria-expanded") === "true";
-    action.setAttribute("aria-expanded", String(!expanded));
-    action.textContent = expanded ? "看筆記" : "收起筆記";
-    detail.hidden = expanded;
-  }
   if (action.dataset.action === "open-photo") document.getElementById(action.dataset.input)?.click();
-  if (action.dataset.action === "open-map-settings") {
-    state.view = "tools";
-    render();
-    document.querySelector("#map-settings")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-  if (action.dataset.action === "save-map-key") {
-    const input = document.querySelector("#maps-api-key");
-    const key = input.value.trim();
-    if (!key) { notify("請先貼上 Google Maps API 金鑰"); return; }
-    const changed = state.mapsApiKey && state.mapsApiKey !== key;
-    state.mapsApiKey = key;
-    save("tokyo-trip-maps-key", key);
-    notify("金鑰已保存在本機" + (changed ? "，即將重新載入地圖" : "，切回行程即可載入地圖"));
-    if (changed) setTimeout(() => location.reload(), 700);
-  }
   if (action.dataset.action === "refresh-weather") fetchWeather();
   if (action.dataset.action === "delete-expense") { state.expenses = state.expenses.filter(item => item.id !== action.dataset.id); save("tokyo-trip-expenses", state.expenses); render(); notify("已刪除這筆記帳"); }
 });
@@ -511,13 +403,6 @@ document.addEventListener("change", event => {
   notify("預約資料已保存在本機");
 });
 
-document.addEventListener("input", event => {
-  const editor = event.target.closest("[data-note-key]");
-  if (!editor) return;
-  state.notes[editor.dataset.noteKey] = editor.value;
-  save("tokyo-trip-notes", state.notes);
-});
-
 render();
 fetchWeather();
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=20260927-ui4", { scope: "./" }).catch(() => {});
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=20260928-notes1", { scope: "./" }).catch(() => {});

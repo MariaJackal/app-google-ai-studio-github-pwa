@@ -1,5 +1,5 @@
-const CACHE_NAME = "tokyo-trip-pwa-v20260927-ui4";
-const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./favicon.svg"];
+const CACHE_NAME = "tokyo-trip-pwa-v20260928-notes1";
+const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./favicon.svg", "./assets/weather/fuji-kawaguchi.jpg", "./assets/weather/hakone-lake-ashi.jpg", "./assets/weather/ueno-park.jpg", "./assets/weather/asakusa-sensoji.jpg", "./assets/weather/tokyo-station.jpg", "./assets/weather/narita-airport.jpg"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)));
